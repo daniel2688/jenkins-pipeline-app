@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        AWS_PROFILE = 'default'
         AWS_DEFAULT_REGION = 'us-east-1'
     }
     
@@ -34,6 +35,7 @@ pipeline {
         stage("Print Environment Variables") {
             steps {
                 script {
+                    echo "AWS_PROFILE: ${env.AWS_PROFILE}"
                     echo "AWS_DEFAULT_REGION: ${env.AWS_DEFAULT_REGION}"
                 }
             }
