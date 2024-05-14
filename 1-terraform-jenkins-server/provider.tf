@@ -1,5 +1,3 @@
-# provider.tf
-
 terraform {
   required_providers {
     aws = {
@@ -11,4 +9,5 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+  profile = "default"  # Aquí se especifica el perfil predeterminado
 }
