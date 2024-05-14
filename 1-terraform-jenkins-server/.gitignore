@@ -1,0 +1,5 @@
+# Ignorar directorio .terraform en cualquier lugar del proyecto
+.terraform/
+
+# Ignorar el archivo específico que excede el límite de tamaño de GitHub
+1-terraform-jenkins-server/.terraform/providers/registry.terraform.io/hashicorp/aws/5.49.0/linux_amd64/terraform-provider-aws_v5.49.0_x5
