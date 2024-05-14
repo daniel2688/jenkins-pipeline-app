@@ -5,7 +5,7 @@ pipeline {
         // Jenkins will use the credentials added earlier
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-        AWS_DEFAULT_REGION = "eu-west-3"
+        AWS_DEFAULT_REGION = "us-east-1"
     }
     stages {
         // Stage 1
@@ -32,6 +32,16 @@ pipeline {
                         // Deploy a service
                         sh "kubectl apply -f nginx-service.yaml"
                     }
+                }
+            }
+        }
+        // Print Environment Variables
+        stage("Print Environment Variables") {
+            steps {
+                script {
+                    echo "AWS_ACCESS_KEY_ID: ${env.AWS_ACCESS_KEY_ID}"
+                    echo "AWS_SECRET_ACCESS_KEY: ${env.AWS_SECRET_ACCESS_KEY}"
+                    echo "AWS_DEFAULT_REGION: ${env.AWS_DEFAULT_REGION}"
                 }
             }
         }
