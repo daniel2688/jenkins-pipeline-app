@@ -2,19 +2,19 @@ pipeline {
     agent any
     
     environment {
-        AWS_PROFILE = 'default'
-        AWS_DEFAULT_REGION = 'us-east-1'
+        // Establece las credenciales de AWS usando el ID correcto
+        AWS_ACCESS_KEY_ID = credentials('aws-credentials')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-credentials')
+        AWS_DEFAULT_REGION = "us-east-1"
     }
     
     stages {
         stage("Create an EKS Cluster") {
             steps {
                 script {
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                        dir('2-terraform-eks-deployment') {
-                            sh "terraform init"
-                            sh "terraform apply -auto-approve"
-                        }
+                    dir('2-terraform-eks-deployment') {
+                        sh "terraform init"
+                        sh "terraform apply -auto-approve"
                     }
                 }
             }
@@ -23,20 +23,11 @@ pipeline {
         stage("Deploy to EKS") {
             steps {
                 script {
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
+                    dir('kubernetes') {
                         sh "aws eks update-kubeconfig --name eks-cluster"
                         sh "kubectl apply -f nginx-deployment.yaml"
                         sh "kubectl apply -f nginx-service.yaml"
                     }
-                }
-            }
-        }
-        
-        stage("Print Environment Variables") {
-            steps {
-                script {
-                    echo "AWS_PROFILE: ${env.AWS_PROFILE}"
-                    echo "AWS_DEFAULT_REGION: ${env.AWS_DEFAULT_REGION}"
                 }
             }
         }
